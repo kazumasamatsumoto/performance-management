@@ -1,5 +1,5 @@
 // src/ReportPage.tsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { db } from "./firebase";
 import auth from "./firebase";
@@ -33,7 +33,7 @@ const ReportPage = () => {
     setRecords([...records, { project: "", hours: "" }]);
   };
 
-  const fetchPastRecords = async () => {
+  const fetchPastRecords = useCallback(async () => {
     if (user) {
       const q = query(
         collection(db, "users", user.uid, "records"),
@@ -42,7 +42,8 @@ const ReportPage = () => {
       const querySnapshot = await getDocs(q);
       setPastRecords(querySnapshot.docs.map((doc) => doc.data()));
     }
-  };
+  }, [user]);
+
   // 追加：案件をフェッチする
   const fetchProjects = async () => {
     const querySnapshot = await getDocs(collection(db, "projects"));
@@ -60,6 +61,7 @@ const ReportPage = () => {
           records,
         }
       );
+      console.log(docRef)
       fetchPastRecords();
     }
   };
@@ -70,7 +72,7 @@ const ReportPage = () => {
 
   useEffect(() => {
     fetchPastRecords();
-  }, [user]);
+  }, [fetchPastRecords]);
 
   return (
     <div>

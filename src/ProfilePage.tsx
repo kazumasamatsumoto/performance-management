@@ -7,7 +7,7 @@ import auth from "./firebase";
 import { Link } from "react-router-dom";
 
 const ProfilePage = () => {
-  const [user, loading, error] = useAuthState(auth);
+  const [user, loading] = useAuthState(auth);
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
   const [skills, setSkills] = useState("");
