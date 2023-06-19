@@ -19,6 +19,9 @@ const AdminProjectPage = () => {
   const [contactPerson, setContactPerson] = useState("");
   const [deadline, setDeadline] = useState("");
   const [status, setStatus] = useState("");
+  const [requiredSkills, setRequiredSkills] = useState("");
+  const [duration, setDuration] = useState("");
+  const [assignedMembers, setAssignedMembers] = useState("");
 
   const navigate = useNavigate();
 
@@ -44,6 +47,9 @@ const AdminProjectPage = () => {
       contactPerson,
       deadline,
       status,
+      requiredSkills,
+      duration,
+      assignedMembers
     });
     setTitle("");
     setDescription("");
@@ -52,6 +58,9 @@ const AdminProjectPage = () => {
     setContactPerson("");
     setDeadline("");
     setStatus("");
+    setRequiredSkills("");
+    setDuration("");
+    setAssignedMembers("");
     fetchProjects();
   };
 
@@ -121,6 +130,27 @@ const AdminProjectPage = () => {
           onChange={(e) => setDeadline(e.target.value)}
           className="w-full p-2 border border-gray-300 rounded"
         />
+        <input
+          type="text"
+          placeholder="必要なスキル"
+          value={requiredSkills}
+          onChange={(e) => setRequiredSkills(e.target.value)}
+          className="w-full p-2 border border-gray-300 rounded"
+        />
+        <input
+          type="text"
+          placeholder="期間"
+          value={duration}
+          onChange={(e) => setDuration(e.target.value)}
+          className="w-full p-2 border border-gray-300 rounded"
+        />
+        <input
+          type="text"
+          placeholder="アサインメンバー"
+          value={assignedMembers}
+          onChange={(e) => setAssignedMembers(e.target.value)}
+          className="w-full p-2 border border-gray-300 rounded"
+        />
         <select
           value={status}
           onChange={(e) => setStatus(e.target.value)}
@@ -148,6 +178,9 @@ const AdminProjectPage = () => {
             <th className="px-4 py-2">担当者</th>
             <th className="px-4 py-2">締め切り</th>
             <th className="px-4 py-2">状態</th>
+            <th className="px-4 py-2">必要なスキル</th>
+            <th className="px-4 py-2">期間</th>
+            <th className="px-4 py-2">アサインメンバー</th>
             <th className="px-4 py-2">操作</th>
           </tr>
         </thead>
@@ -161,6 +194,9 @@ const AdminProjectPage = () => {
               <td className="px-4 py-2">{project.contactPerson}</td>
               <td className="px-4 py-2">{project.deadline}</td>
               <td className="px-4 py-2">{project.status}</td>
+              <td className="px-4 py-2">{project.requiredSkills}</td>
+              <td className="px-4 py-2">{project.duration}</td>
+              <td className="px-4 py-2">{project.assignedMembers}</td>
               <td className="px-4 py-2">
                 <button
                   onClick={() => handleDeleteProject(project.id)}

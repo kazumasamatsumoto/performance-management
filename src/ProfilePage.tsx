@@ -10,7 +10,7 @@ const ProfilePage = () => {
   const [user, loading] = useAuthState(auth);
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
-  const [skills, setSkills] = useState("");
+  const [skills, setSkills] = useState([]);
   const [futureDirection, setFutureDirection] = useState("");
 
   const handleSave = async () => {
@@ -33,7 +33,7 @@ const ProfilePage = () => {
         if (docSnap.exists()) {
           setName(docSnap.data().name);
           setAge(docSnap.data().age);
-          setSkills(docSnap.data().skills);
+          setSkills(Array.isArray(docSnap.data().skills) ? docSnap.data().skills : []); // 配列であることを確認
           setFutureDirection(docSnap.data().futureDirection);
         }
       }
@@ -41,6 +41,13 @@ const ProfilePage = () => {
 
     fetchUserData();
   }, [user]);
+
+    // スキルを文字列に変換・配列に分割するハンドラー
+    const handleSkillsChange = (e: any) => {
+      let skillString = e.target.value;
+      let skillArray = skillString.split(',');
+      setSkills(skillArray);
+    }
 
   if (loading) {
     return <div>Loading...</div>;
@@ -64,9 +71,9 @@ const ProfilePage = () => {
           className="mb-4 p-2 border border-gray-300 rounded w-full"
         />
         <input
-          value={skills}
-          onChange={(e) => setSkills(e.target.value)}
-          placeholder="Skills"
+          value={skills.join(',')}
+          onChange={handleSkillsChange} // スキル入力フィールドの変更ハンドラーを更新
+          placeholder="Skills (comma separated)" // プレースホルダーを更新
           className="mb-4 p-2 border border-gray-300 rounded w-full"
         />
         <input
