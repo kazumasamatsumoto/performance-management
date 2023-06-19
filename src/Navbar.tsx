@@ -24,9 +24,14 @@ const Navbar = () => {
 
   if (user) {
     return (
-      <div>
-        Logged in as {user.email}
-        <button onClick={handleLogout}>ログアウト</button>
+      <div className="flex justify-between items-center p-5 bg-blue-500 text-white">
+        <div>Logged in as {user.email}</div>
+        <button
+          onClick={handleLogout}
+          className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+        >
+          ログアウト
+        </button>
       </div>
     );
   }
