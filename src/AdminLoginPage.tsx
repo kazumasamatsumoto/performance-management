@@ -41,20 +41,22 @@ const AdminLoginPage = () => {
   };
 
   return (
-    <div>
-      <h1>管理者ログイン</h1>
-      <form onSubmit={handleLogin}>
+    <div className="p-4">
+      <h1 className="text-2xl mb-4">管理者ログイン</h1>
+      <form onSubmit={handleLogin} className="space-y-4">
         <input
           type="email"
           placeholder="Email"
           onChange={(e) => setEmail(e.target.value)}
+          className="w-full p-2 border border-gray-300 rounded"
         />
         <input
           type="password"
           placeholder="Password"
           onChange={(e) => setPassword(e.target.value)}
+          className="w-full p-2 border border-gray-300 rounded"
         />
-        <button type="submit">ログイン</button>
+        <button type="submit" className="w-full p-2 bg-blue-500 text-white rounded hover:bg-blue-700">ログイン</button>
       </form>
     </div>
   );

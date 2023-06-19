@@ -48,31 +48,45 @@ const ProfilePage = () => {
 
   if (user) {
     return (
-      <div>
-        <h1>Profile Page</h1>
-        <p>Account: {user.email}</p>
+      <div className="p-4">
+        <h1 className="text-2xl mb-4">Profile Page</h1>
+        <p className="mb-4">Account: {user.email}</p>
         <input
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Name"
+          className="mb-4 p-2 border border-gray-300 rounded w-full"
         />
         <input
           value={age}
           onChange={(e) => setAge(e.target.value)}
           placeholder="Age"
+          className="mb-4 p-2 border border-gray-300 rounded w-full"
         />
         <input
           value={skills}
           onChange={(e) => setSkills(e.target.value)}
           placeholder="Skills"
+          className="mb-4 p-2 border border-gray-300 rounded w-full"
         />
         <input
           value={futureDirection}
           onChange={(e) => setFutureDirection(e.target.value)}
           placeholder="Future Direction"
+          className="mb-4 p-2 border border-gray-300 rounded w-full"
         />
-        <button onClick={handleSave}>Save</button>
-        <Link to="/employee-dashboard">トップに戻る</Link>
+        <button
+          onClick={handleSave}
+          className="mb-4 bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700"
+        >
+          Save
+        </button>
+        <Link
+          to="/employee-dashboard"
+          className="inline-block bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-700"
+        >
+          トップに戻る
+        </Link>
       </div>
     );
   }

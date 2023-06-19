@@ -69,63 +69,77 @@ const ProjectManagementPage = () => {
   };
 
   return (
-    <div>
-      <button onClick={() => navigate("/admin-dashboard")}>戻る</button>
-      <h1>与実管理</h1>
-
-      <label htmlFor="project-select">案件:</label>
-      <select
-        id="project-select"
-        onChange={(e) => setSelectedProject(e.target.value)}
+    <div className="p-4">
+      <button
+        onClick={() => navigate("/admin-dashboard")}
+        className="mb-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
       >
-        <option value="">すべての案件</option>
-        {projects.map((project, index) => (
-          <option key={index} value={project}>
-            {project}
-          </option>
-        ))}
-      </select>
+        戻る
+      </button>
 
-      <label htmlFor="user-select" style={{ marginLeft: "10px" }}>
-        ユーザー:
-      </label>
-      <select
-        id="user-select"
-        onChange={(e) => setSelectedUser(e.target.value)}
-      >
-        <option value="">すべてのユーザー</option>
-        {users.map((user, index) => (
-          <option key={index} value={user}>
-            {user}
-          </option>
-        ))}
-      </select>
+      <h1 className="text-2xl mb-4">与実管理</h1>
 
-      <label htmlFor="start-date" style={{ marginLeft: "10px" }}>
-        開始日:
-      </label>
-      <input
-        type="date"
-        id="start-date"
-        onChange={(e) => setStartDate(e.target.value)}
-      />
+      <div className="flex space-x-4 mb-8">
+        <div>
+          <label htmlFor="project-select" className="block mb-2">案件:</label>
+          <select
+            id="project-select"
+            onChange={(e) => setSelectedProject(e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded"
+          >
+            <option value="">すべての案件</option>
+            {projects.map((project, index) => (
+              <option key={index} value={project}>
+                {project}
+              </option>
+            ))}
+          </select>
+        </div>
 
-      <label htmlFor="end-date" style={{ marginLeft: "10px" }}>
-        終了日:
-      </label>
-      <input
-        type="date"
-        id="end-date"
-        onChange={(e) => setEndDate(e.target.value)}
-      />
+        <div>
+          <label htmlFor="user-select" className="block mb-2">ユーザー:</label>
+          <select
+            id="user-select"
+            onChange={(e) => setSelectedUser(e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded"
+          >
+            <option value="">すべてのユーザー</option>
+            {users.map((user, index) => (
+              <option key={index} value={user}>
+                {user}
+              </option>
+            ))}
+          </select>
+        </div>
 
-      <table>
+        <div>
+          <label htmlFor="start-date" className="block mb-2">開始日:</label>
+          <input
+            type="date"
+            id="start-date"
+            onChange={(e) => setStartDate(e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="end-date" className="block mb-2">終了日:</label>
+          <input
+            type="date"
+            id="end-date"
+            onChange={(e) => setEndDate(e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded"
+          />
+        </div>
+      </div>
+
+      <table className="w-full table-auto">
         <thead>
-          <tr>
-            <th>ユーザー</th>
-            <th>日付</th>
-            <th>案件</th>
-            <th>時間</th>
+          <tr className="bg-blue-100">
+            <th className="px-4 py-2">ユーザー</th>
+            <th className="px-4 py-2">日付</th>
+            <th className="px-4 py-2">案件</th>
+            <th className="px-4 py-2">時間</th>
           </tr>
         </thead>
         <tbody>
@@ -138,11 +152,11 @@ const ProjectManagementPage = () => {
                 dateInRange(record.date, startDate, endDate)
             )
             .map((record, index) => (
-              <tr key={index}>
-                <td>{record.user}</td>
-                <td>{record.date}</td>
-                <td>{record.project}</td>
-                <td>{record.hours} 時間</td>
+              <tr key={index} className="text-center border">
+                <td className="px-4 py-2">{record.user}</td>
+                <td className="px-4 py-2">{record.date}</td>
+                <td className="px-4 py-2">{record.project}</td>
+                <td className="px-4 py-2">{record.hours} 時間</td>
               </tr>
             ))}
         </tbody>
