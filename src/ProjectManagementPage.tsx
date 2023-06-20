@@ -2,6 +2,15 @@ import React, { useState, useEffect } from "react";
 import { db } from "./firebase";
 import { getDocs, collection, query, orderBy } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
+import { PieChart, Pie, Tooltip, Legend } from "recharts";
+
+const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#653CA0"];
+
+interface ProjectData {
+  name: string;
+  value: number;
+  percentage: string;
+}
 
 const ProjectManagementPage = () => {
   const [records, setRecords] = useState<any[]>([]);
@@ -32,10 +41,16 @@ const ProjectManagementPage = () => {
         recordsSnapshot.forEach((recordDoc) => {
           const recordData = recordDoc.data();
           recordData.records.forEach((record: any) => {
+            const hours = parseFloat(record.hours);
+            if (isNaN(hours)) {
+              console.error(`Invalid hours: ${record.hours}`);
+              return;
+            }
+
             fetchedRecords.push({
               user: userId,
               project: record.project,
-              hours: record.hours,
+              hours,
               date: recordData.date,
             });
           });
@@ -67,6 +82,32 @@ const ProjectManagementPage = () => {
     }
     return true;
   };
+  const recordsFiltered = records.filter(
+    (record) =>
+      (selectedProject === "" || record.project === selectedProject) &&
+      (selectedUser === "" || record.user === selectedUser) &&
+      dateInRange(record.date, startDate, endDate)
+  );
+  const totalTime = recordsFiltered.reduce((acc, curr) => acc + curr.hours, 0);
+
+  const projectHours = recordsFiltered.reduce(
+    (acc: { [key: string]: number }, curr: any) => {
+      if (!acc[curr.project]) {
+        acc[curr.project] = 0;
+      }
+      acc[curr.project] += curr.hours;
+      return acc;
+    },
+    {}
+  );
+
+  const projectData: ProjectData[] = Object.entries(projectHours).map(
+    ([key, value]) => ({
+      name: key,
+      value: value,
+      percentage: ((value / totalTime) * 100).toFixed(2),
+    })
+  );
 
   return (
     <div className="p-4">
@@ -81,7 +122,9 @@ const ProjectManagementPage = () => {
 
       <div className="flex space-x-4 mb-8">
         <div>
-          <label htmlFor="project-select" className="block mb-2">案件:</label>
+          <label htmlFor="project-select" className="block mb-2">
+            案件:
+          </label>
           <select
             id="project-select"
             onChange={(e) => setSelectedProject(e.target.value)}
@@ -97,7 +140,9 @@ const ProjectManagementPage = () => {
         </div>
 
         <div>
-          <label htmlFor="user-select" className="block mb-2">ユーザー:</label>
+          <label htmlFor="user-select" className="block mb-2">
+            ユーザー:
+          </label>
           <select
             id="user-select"
             onChange={(e) => setSelectedUser(e.target.value)}
@@ -113,7 +158,9 @@ const ProjectManagementPage = () => {
         </div>
 
         <div>
-          <label htmlFor="start-date" className="block mb-2">開始日:</label>
+          <label htmlFor="start-date" className="block mb-2">
+            開始日:
+          </label>
           <input
             type="date"
             id="start-date"
@@ -123,13 +170,60 @@ const ProjectManagementPage = () => {
         </div>
 
         <div>
-          <label htmlFor="end-date" className="block mb-2">終了日:</label>
+          <label htmlFor="end-date" className="block mb-2">
+            終了日:
+          </label>
           <input
             type="date"
             id="end-date"
             onChange={(e) => setEndDate(e.target.value)}
             className="w-full p-2 border border-gray-300 rounded"
           />
+        </div>
+      </div>
+      <div>
+        <h2 className="text-xl mb-4">案件ごとの集計時間</h2>
+        <table className="w-full table-auto">
+          <thead>
+            <tr className="bg-blue-100">
+              <th className="px-4 py-2">案件</th>
+              <th className="px-4 py-2">時間</th>
+              <th className="px-4 py-2">全体からの割合</th>
+            </tr>
+          </thead>
+          <tbody>
+            {projectData.map((project, index) => (
+              <tr key={index} className="text-center border">
+                <td className="px-4 py-2">{project.name}</td>
+                <td className="px-4 py-2">{project.value} 時間</td>
+                <td className="px-4 py-2">{project.percentage} %</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="mt-8 p-4 bg-white rounded shadow">
+        <div className="flex justify-center">
+          <h2 className="text-xl font-bold mb-4">案件ごとの割合（グラフ）</h2>
+        </div>
+        <div className="flex justify-center">
+          <PieChart width={400} height={400}>
+            <Pie
+              dataKey="value"
+              isAnimationActive={false}
+              data={projectData.map((entry, index) => ({
+                ...entry,
+                fill: COLORS[index % COLORS.length],
+              }))}
+              cx="50%"
+              cy="50%"
+              outerRadius={100}
+              label
+            />
+            <Tooltip />
+            <Legend />
+          </PieChart>
         </div>
       </div>
 
@@ -161,6 +255,7 @@ const ProjectManagementPage = () => {
             ))}
         </tbody>
       </table>
+
     </div>
   );
 };
